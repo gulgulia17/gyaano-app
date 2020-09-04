@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "385601257923",
+    "firebase_url": "https://rn-gyaano.firebaseio.com",
+    "project_id": "rn-gyaano",
+    "storage_bucket": "rn-gyaano.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385601257923:android:3a8e4a468b1982b4047d76",
+        "android_client_info": {
+          "package_name": "com.gyaano"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "385601257923-hs5om71ckq80q34cfpo17c82intlriui.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gyaano",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "385601257923-4815jtcu7omvhom5c2fgksa1jieq9g8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3RBDEhmFInwzJ0qn38PFtd-hMEj39RAI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "385601257923-4815jtcu7omvhom5c2fgksa1jieq9g8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
