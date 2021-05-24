@@ -22,6 +22,8 @@ import Forgot from '../screens/Forgot';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PdfScreen from '../screens/PdfScreen';
 import { Icon } from 'native-base';
+import EBook from '../screens/EBook';
+import ForgetPassword from '../screens/ForgetPassword';
 
 export default class StackNavigator extends Component {
     render() {
@@ -50,6 +52,11 @@ export default class StackNavigator extends Component {
                     <Stack.Screen
                         name="Forgot"
                         component={Forgot}
+                    />
+                     <Stack.Screen
+                        name="ForgetPassword"
+                        component={ForgetPassword}
+                        options={{ title: 'Forget Password' }}
                     />
                 </Stack.Navigator>
             )
@@ -97,6 +104,10 @@ export default class StackNavigator extends Component {
                                 height: 0
                             }
                         }}
+                    />
+                    <Stack.Screen
+                        name="EBook"
+                        component={EBook}
                     />
                     <Stack.Screen
                         name="Docviwer"

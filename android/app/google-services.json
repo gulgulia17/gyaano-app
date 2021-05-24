@@ -1,42 +1,41 @@
 {
   "project_info": {
-    "project_number": "385601257923",
-    "firebase_url": "https://rn-gyaano.firebaseio.com",
-    "project_id": "rn-gyaano",
-    "storage_bucket": "rn-gyaano.appspot.com"
+    "project_number": "72446127865",
+    "project_id": "cis-gyaano",
+    "storage_bucket": "cis-gyaano.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:385601257923:android:3a8e4a468b1982b4047d76",
+        "mobilesdk_app_id": "1:72446127865:android:a21ec87ece0b1a2928bc28",
         "android_client_info": {
           "package_name": "com.gyaano"
         }
       },
       "oauth_client": [
         {
-          "client_id": "385601257923-hs5om71ckq80q34cfpo17c82intlriui.apps.googleusercontent.com",
+          "client_id": "72446127865-mrch8sa6hok1m350ie6a7tfliv5ogkf5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.gyaano",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "certificate_hash": "5bcf2d609756c6f41bb3077986ffef0409bd32a3"
           }
         },
         {
-          "client_id": "385601257923-4815jtcu7omvhom5c2fgksa1jieq9g8u.apps.googleusercontent.com",
+          "client_id": "72446127865-87njbtef16akgn3ac435fbb25cu0ub7h.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB3RBDEhmFInwzJ0qn38PFtd-hMEj39RAI"
+          "current_key": "AIzaSyCb3L4Fjx538glva_u3S2ave3OjitSMM5g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "385601257923-4815jtcu7omvhom5c2fgksa1jieq9g8u.apps.googleusercontent.com",
+              "client_id": "72446127865-87njbtef16akgn3ac435fbb25cu0ub7h.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

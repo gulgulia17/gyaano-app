@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, } from 'react-native'
 import { Container, Button, Content, Spinner, Item, Input, Icon, Text, View } from 'native-base'
-import { GoogleSignin, statusCodes } from 'react-native-google-signin'
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { getUniqueId } from 'react-native-device-info';
 import APIKey from '../google-congig';
 

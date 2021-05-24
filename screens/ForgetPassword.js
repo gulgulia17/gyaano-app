@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Image, ActivityIndicator, Alert } from 'react-native'
 import { Container, Button, Icon, Content, Text, Item, Input } from 'native-base'
+import { getUniqueId } from 'react-native-device-info';
+
 const SucessIcon = ({ field }) => {
     return (
         <View>
@@ -14,66 +16,56 @@ const SucessIcon = ({ field }) => {
 }
 
 
-export default class Forgot extends Component {
+export default class ForgetPassword extends Component {
     state = {
         isLoadding: false,
         email: '',
-        otp: '',
-        otpField: false
-    }
-    _forogotHandler = (email) => {
-
-        !email ? alert('Please enter your email address.')
-            : this.forgot(email)
+        password: '',
+        password_confirmation: '',
+        device_id: '',
     }
 
-    _resetPassword = async (email, otp) => {
+    componentDidMount() {
+        this.setState({
+            email: this.props.route.params.email,
+            device_id: getUniqueId()
+        })
+    }
+
+    _resetPassword = async (email, password, password_confirmation) => {
+        if (!password.length || !password_confirmation.length) {
+            Alert.alert('Required', 'All fields are required')
+            return;
+        }
+
+        if (password !== password_confirmation) {
+            Alert.alert('Invalid Password', 'New password and Confirm Password must match.')
+            return;
+        }
         const formData = new FormData();
         formData.append('email', email)
-        formData.append('otp', otp)
-        this.setState({ isLoadding: true })
-        const response = await fetch('http://home.gyaano.in/api/reset/password', {
+        formData.append('password', password)
+        formData.append('password_confirmation', password_confirmation)
+        formData.append('device_id', this.state.device_id)
+
+        // this.setState({ isLoadding: true })
+        const response = await fetch('http://home.gyaano.in/api/update/password', {
             method: 'POST',
             body: formData
         });
         const responseJson = await response.json()
+        console.log(responseJson);
         if (!responseJson.success) {
-            if (typeof responseJson.errors == "object") {
-                Alert.alert('Invalid OTP', `${responseJson.errors.otp[0]}`)
-            }
             Alert.alert('Error', responseJson.message)
             this.setState({ isLoadding: false })
             return;
         }
-        this.props.navigation.navigate('ForgetPassword', { email })
+        this.props.navigation.navigate('Login')
         this.setState({ isLoadding: false })
     }
 
-    forgot = async (email) => {
-        const formData = new FormData();
-        formData.append('email', email)
-        this.setState({ isLoadding: true })
-        const response = await fetch('http://home.gyaano.in/api/forgot/password', {
-            method: 'POST',
-            body: formData
-        });
-        const responseJson = await response.json()
-        if (responseJson.success) {
-            Alert.alert('OTP Sent', responseJson.message)
-            this.setState({
-                otpField: true
-            })
-        } else {
-            if (typeof responseJson.errors == "object") {
-                Alert.alert('Invalid Email', `${responseJson.errors.email[0]}`)
-            } else {
-                Alert.alert('Error', `${responseJson.message}`)
-            }
-        }
-        this.setState({ isLoadding: false })
-    }
     render() {
-        const { isLoadding, email, otp, otpField } = this.state
+        const { isLoadding, email, password, password_confirmation } = this.state
         const { navigation } = this.props
         const { logoContainer, bgWhite, center } = styles
         return (
@@ -89,41 +81,41 @@ export default class Forgot extends Component {
                     </View>
                     <View style={{ marginTop: '15%' }}>
                         <View style={{ margin: '3%' }}>
-                            <Text>Email address</Text>
-                            <Item>
-                                <Icon type="FontAwesome5" name='envelope' style={{ color: '#0008' }} />
-                                <Input
-                                    editable={!otpField}
-                                    onChangeText={(email) => this.setState({ email })}
-                                    value={email}
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                    placeholder='Please enter your email.'
-                                />
-                                <SucessIcon field={email} />
-                            </Item>
-                        </View>
-                        <View style={[!otpField ? { display: 'none' } : null, { margin: '3%' }]}>
-                            <Text>OTP</Text>
+                            <Text>Password</Text>
                             <Item>
                                 <Icon type="FontAwesome5" name='key' style={{ color: '#0008' }} />
                                 <Input
-                                    onChangeText={(otp) => this.setState({ otp })}
-                                    value={otp}
-                                    maxLength={6}
-                                    keyboardType="number-pad"
-                                    placeholder='Please enter your otp.'
+                                    onChangeText={(password) => this.setState({ password })}
+                                    value={password}
+                                    secureTextEntry={true}
+                                    autoCapitalize="none"
+                                    placeholder='Please enter your new password.'
                                 />
-                                <SucessIcon field={otp} />
+                                <SucessIcon field={password} />
                             </Item>
                         </View>
+
+                        <View style={{ margin: '3%' }}>
+                            <Text>Confirm Password</Text>
+                            <Item>
+                                <Icon type="FontAwesome5" name='key' style={{ color: '#0008' }} />
+                                <Input
+                                    onChangeText={(password_confirmation) => this.setState({ password_confirmation })}
+                                    value={password_confirmation}
+                                    autoCapitalize="none"
+                                    placeholder='Please re-enter your new password.'
+                                />
+                                <SucessIcon field={password_confirmation} />
+                            </Item>
+                        </View>
+
                         <View style={{ margin: '3%' }}>
                             <Button
                                 block bordered
                                 transparent
                                 dark
-                                onPress={() => otpField ? this._resetPassword(email, otp) : this._forogotHandler(email)}
-                                disabled={isLoadding ? true : false}>
+                                onPress={() => this._resetPassword(email, password, password_confirmation)}
+                                disabled={isLoadding}>
                                 <Text>submit</Text>
                             </Button>
                         </View>

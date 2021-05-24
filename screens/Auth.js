@@ -6,11 +6,10 @@ import {
     ToastAndroid,
 } from 'react-native'
 import { Container, Button, Content, Text, View, Icon } from 'native-base';
-import { GoogleSignin, statusCodes } from 'react-native-google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { getUniqueId } from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import { StackActions } from '@react-navigation/native';
-import APIKey from '../google-congig';
 
 export default class Auth extends Component {
     state = {
@@ -20,8 +19,7 @@ export default class Auth extends Component {
     }
     async componentDidMount() {
         GoogleSignin.configure({
-            androidClientId: APIKey,
-            forceCodeForRefreshToken: true,
+            webClientId: '72446127865-87njbtef16akgn3ac435fbb25cu0ub7h.apps.googleusercontent.com',
         });
     }
 

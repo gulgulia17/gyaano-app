@@ -22,7 +22,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Docs extends Component {
-
     state = {
         isLoadding: false,
         CardData: [],
@@ -54,14 +53,14 @@ export default class Docs extends Component {
         const { navigation } = this.props
         const { isLoadding, CardData } = this.state
         const { center, hide } = styles
-        const RenderCard = ({ imagePath, title }) => {
+        const RenderCard = ({ item, id, imagePath, title }) => {
             return (
-                <TouchableOpacity onPress={() => navigation.navigate('Docviwer')}>
+                <TouchableOpacity onPress={() => navigation.navigate('EBook', { pdfid: item.id })}>
                     <Card style={{ width: Dimensions.get('window').width / 2.15, marginRight: '3%' }}>
                         <CardItem cardBody>
-                            <Image source={imagePath} style={{ height: 150, width: null, flex: 1, resizeMode: 'center' }} />
+                            <Image source={{ uri: `http://home.gyaano.in/images/banner_image/${imagePath}` }} style={{ height: 150, width: null, flex: 1, resizeMode: 'center' }} />
                         </CardItem>
-                        <CardItem>
+                        <CardItem style={{ borderTopColor: '#000', borderTopWidth: 0.5 }}>
                             <Body>
                                 <Text style={{ fontFamily: 'Montserrat-SemiBold', fontSize: 16 }}>{title}</Text>
                             </Body>
@@ -78,7 +77,7 @@ export default class Docs extends Component {
                             <Button transparent onPress={() => navigation.openDrawer()} >
                                 <Icon name='menu' style={{ color: '#000' }} />
                             </Button>
-                            <Text style={styles.title}>Docs</Text>
+                            <Text style={[styles.title, { marginTop: '2%' }]}>Docs</Text>
                         </View>
                     </View>
                 </View>
@@ -91,7 +90,9 @@ export default class Docs extends Component {
                                     renderItem={
                                         ({ item }) =>
                                             <RenderCard
-                                                imagePath={item.imagePath}
+                                                item={item}
+                                                id={item.id}
+                                                imagePath={item.banner_image}
                                                 title={item.title}
                                             />
                                     }

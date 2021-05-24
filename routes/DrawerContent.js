@@ -11,7 +11,7 @@ import Fontawesome from 'react-native-vector-icons/FontAwesome5';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { Icon } from 'native-base';
 
-import { GoogleSignin } from 'react-native-google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import APIKey from '../google-congig';
 
 export default class DrawerContent extends Component {
@@ -29,7 +29,7 @@ export default class DrawerContent extends Component {
 
         let formdata = new FormData();
         formdata.append("id", userID)
-        fetch('https://gyaano.in/api/getprofiledata', {
+        fetch('http://home.gyaano.in/api/getprofiledata', {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',

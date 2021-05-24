@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
-import { Container, Content, Card, Spinner, Icon } from 'native-base'
+import { Text, StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Alert, ActivityIndicator, Image } from 'react-native'
+import { Container, Content, Card, Spinner, Icon, CardItem } from 'native-base'
 import AsyncStorage from '@react-native-community/async-storage';
 
-const ListRender = ({ url, title, navigation, subs, subscribed }) => {
+const ListRender = ({ thumbnail, url, title, navigation, subs, subscribed }) => {
     return (
         <TouchableOpacity
             onPress={() =>
@@ -13,6 +13,9 @@ const ListRender = ({ url, title, navigation, subs, subscribed }) => {
                         navigation.navigate('CoursePlayer', { url: url }))
                     : navigation.navigate('CoursePlayer', { url: url })}>
             <Card style={styles.pdfContainer}>
+                <CardItem cardBody>
+                    <Image source={{ uri: `http://home.gyaano.in/images/thumbnail/${thumbnail}` }} style={{ height: 150, width: '100%', flex: 1, resizeMode: 'cover' }} />
+                </CardItem>
                 <View style={styles.pdf}>
                     <Text
                         style={styles.pdfTitle}
@@ -100,6 +103,7 @@ export default class CourseTopic extends Component {
                                     renderItem={
                                         ({ item }) =>
                                             <ListRender
+                                                thumbnail={item.thumbnail}
                                                 url={item.link}
                                                 title={item.topic}
                                                 navigation={navigation}
@@ -129,6 +133,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: '5%',
+        borderTopColor: '#0005',
+        paddingTop: '4%',
+        borderTopWidth: 1
     },
     pdfTitle: {
         textTransform: 'capitalize',

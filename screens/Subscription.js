@@ -1,16 +1,7 @@
 import React, { Component } from "react";
-import {
-    Modal,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-    ActivityIndicator,
-    Alert
-} from "react-native";
+import { Modal, StyleSheet, View, Dimensions, ActivityIndicator, Alert } from "react-native";
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Button } from "native-base";
 import { StackActions } from '@react-navigation/native';
 const INJECTEDJAVASCRIPT = 'const meta = document.createElement(\'meta\'); meta.setAttribute(\'content\', \'width=device-width, initial-scale=1, maximum-scale=0.99, user-scalable=0\'); meta.setAttribute(\'name\', \'viewport\'); document.getElementsByTagName(\'head\')[0].appendChild(meta);document.forms.payu.submit();'
 export default class Subscription extends Component {
@@ -20,10 +11,6 @@ export default class Subscription extends Component {
         payStatus: '',
     };
 
-    componentDidMount() {
-        this.PaymentHandler(this.props.route.params)
-    }
-
     setModalVisible = (visible) => {
         this.setState({
             paytm: null,
@@ -32,9 +19,11 @@ export default class Subscription extends Component {
             payStatus: 'canceled',
         });
     }
+
     componentDidMount = async () => {
 
-        const { courseId } = this.props.route.params
+        const { courseId, pdf } = this.props.route.params
+        let url = 'http://home.gyaano.in/api/payment'
         const token = await AsyncStorage.getItem('token');
         const userID = await AsyncStorage.getItem('userID');
         this.setState({
@@ -43,8 +32,13 @@ export default class Subscription extends Component {
         })
         let formdata = new FormData();
         formdata.append("student_id", userID)
-        formdata.append("course_id", courseId)
-        fetch('http://home.gyaano.in/api/payment', {
+        if (pdf) {
+            url = 'http://home.gyaano.in/api/pdfpayment'
+            formdata.append("pdfid", courseId)
+        } else {
+            formdata.append("course_id", courseId)
+        }
+        fetch(url, {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
