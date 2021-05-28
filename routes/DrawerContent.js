@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, ActivityIndicator, Dimensions, Linking, Modal, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, View, ActivityIndicator, Linking, Modal, TouchableOpacity, Alert } from 'react-native'
 import {
     DrawerContentScrollView,
     DrawerItem
@@ -12,7 +12,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import { Icon } from 'native-base';
 
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import APIKey from '../google-congig';
+import { APIKey, APIKeyBackup } from '../google-congig';
 
 export default class DrawerContent extends Component {
     state = {
@@ -60,23 +60,25 @@ export default class DrawerContent extends Component {
         const { fname, lname, isSignningOut, modalVisible } = this.state
         const { navigation } = this.props
         const { userInfoSection, title, font, drawerSection, bottomDrawerSection, center, hide } = styles
-        const signOut = async () => {
+        const signOut = async (APIKey) => {
             this.setState({ isSignningOut: true })
-            GoogleSignin.configure({
-                androidClientId: APIKey,
-                forceCodeForRefreshToken: true,
-            });
             try {
+                GoogleSignin.configure({
+                    webClientId: APIKey
+                });
                 await GoogleSignin.revokeAccess();
                 await AsyncStorage.removeItem('isLoggedIn');
                 await AsyncStorage.removeItem('token');
                 await AsyncStorage.removeItem('userID');
                 navigation.dispatch(StackActions.replace('AuthScreen'));
-
             } catch (e) {
-                console.log(e);
+                try {
+                    signOut(APIKeyBackup)
+                } catch (error) {
+                    Alert.alert('Error', 'Please clear app data in settings.');
+                }
             } finally {
-                // this.setState({ isSignningOut: false })
+                this.setState({ isSignningOut: false })
             }
 
         }
@@ -239,7 +241,7 @@ export default class DrawerContent extends Component {
                             />
                         )}
                         label={() => <Text style={font}>{'Sign Out'}</Text>}
-                        onPress={() => { signOut() }}
+                        onPress={() => { signOut(APIKey) }}
                     />
                 </View>
 

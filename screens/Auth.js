@@ -10,17 +10,13 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { getUniqueId } from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import { StackActions } from '@react-navigation/native';
+import { APIKey, APIKeyBackup } from '../google-congig';
 
 export default class Auth extends Component {
     state = {
         userInfo: [],
         status: false,
         modalVisible: false
-    }
-    async componentDidMount() {
-        GoogleSignin.configure({
-            webClientId: '72446127865-87njbtef16akgn3ac435fbb25cu0ub7h.apps.googleusercontent.com',
-        });
     }
 
     setModalVisible = (visible) => {
@@ -72,23 +68,22 @@ export default class Auth extends Component {
             });
     }
 
-    signIn = async () => {
+    signIn = async (APIKey) => {
         this.setState({ status: true });
         try {
+            GoogleSignin.configure({
+                webClientId: APIKey
+            });
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             this.setState({ userInfo, status: true, });
             this._loginHandler(userInfo.user.email);
 
-        } catch (error) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                // operation (e.g. sign in) is in progress already
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                // play services not available or outdated
-            } else {
-                Alert.alert('Signin Error', `${error}`)
+        } catch (e) {
+            try {
+                this.signIn(APIKeyBackup);
+            } catch (e) {
+                ToastAndroid.show("Login Faild, Something went wrong please try with email and password!.", ToastAndroid.LONG);
             }
         } finally {
             this.setState({ status: false, });
@@ -111,7 +106,7 @@ export default class Auth extends Component {
                             </Button>
                         </View>
                         <View style={{ margin: '3%' }}>
-                            <Button block bordered transparent onPress={() => this.signIn()}>
+                            <Button block bordered transparent onPress={() => this.signIn(APIKey)}>
                                 <Icon name="google" type="FontAwesome5" />
                                 <Text style={[styles.title, { letterSpacing: 2, }]}>Login with Google</Text>
                             </Button>

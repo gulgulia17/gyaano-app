@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, } from 'react-native'
-import { Container, Button, Content, Spinner, Item, Input, Icon, Text, View } from 'native-base'
+import { StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, } from 'react-native'
+import { Container, Button, Content, Item, Input, Icon, Text, View } from 'native-base'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { getUniqueId } from 'react-native-device-info';
-import APIKey from '../google-congig';
+import { APIKey, APIKeyBackup } from '../google-congig';
 
 export default class Register extends Component {
     state = {
@@ -30,15 +30,15 @@ export default class Register extends Component {
     }
     componentDidMount = async () => {
         this.setState({ devide_id: getUniqueId() })
-        GoogleSignin.configure({
-            androidClientId: APIKey,
-            forceCodeForRefreshToken: true,
-        });
+
     }
 
-    google = async () => {
+    google = async (APIKey) => {
         this.setState({ status: true })
         try {
+            GoogleSignin.configure({
+                webClientId: APIKey
+            });
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             if (typeof userInfo.user != "undefined") {
@@ -54,20 +54,14 @@ export default class Register extends Component {
             }
 
 
-        } catch (error) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                console.log(statusCodes.SIGN_IN_CANCELLED);
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                console.log(statusCodes.IN_PROGRESS);
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                console.log(statusCodes.PLAY_SERVICES_NOT_AVAILABLE);
-            } else {
-                console.log(error)
+        } catch (e) {
+            try {
+                this.google(APIKeyBackup)
+            } catch (e) {
+                Alert.alert('Error', 'Google service not avilable please fill the form manually.');
             }
         }
-        finally {
-            this.setState({ status: false })
-        }
+        finally { this.setState({ status: false }) }
     }
 
     render() {
@@ -168,7 +162,7 @@ export default class Register extends Component {
                     this.setState({
                         status: false,
                     });
-                    alert(error);console.log(error);
+                    alert(error); console.log(error);
                 });
         }
         const ErrorRender = ({ error }) => {
