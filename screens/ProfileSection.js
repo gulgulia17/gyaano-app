@@ -232,10 +232,7 @@ export default class ProfileSection extends Component {
                                     && lastname != "undefinded" && name.length
                                     && name != "undefinded" && stateid && editable ?
                                     <Button block bordered transparent dark onPress={() => profileEditHandler()}>
-                                        <Text style={[title, {
-                                            borderBottomWidth: 0, fontSize: 16, textAlign: 'center',
-                                            alignSelf: 'center'
-                                        }]}>Submit</Text>
+                                        <Text style={[title, { borderBottomWidth: 0, fontSize: 16, textAlign: 'center' }]}>Submit</Text>
                                     </Button>
                                     : null
                             }
@@ -254,7 +251,7 @@ export default class ProfileSection extends Component {
 
 const styles = StyleSheet.create({
     title: {
-        fontWeight: '700',
+        fontFamily: 'Montserrat-Regular',
         letterSpacing: 2,
         textTransform: 'uppercase',
         fontSize: 18,
@@ -262,7 +259,3 @@ const styles = StyleSheet.create({
         borderBottomColor: '#0005',
     }
 })
-
-
-// phone
-// speedmeter

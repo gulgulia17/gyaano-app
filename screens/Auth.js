@@ -6,11 +6,11 @@ import {
     ToastAndroid,
 } from 'react-native'
 import { Container, Button, Content, Text, View, Icon } from 'native-base';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+// import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { getUniqueId } from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import { StackActions } from '@react-navigation/native';
-import { APIKey, APIKeyBackup } from '../google-congig';
+import { APIKey, APIKeyBackup } from '../google-config';
 
 export default class Auth extends Component {
     state = {
@@ -50,13 +50,13 @@ export default class Auth extends Component {
                     ToastAndroid.show("Login Successful, If you don't get redirected automatically please reopen the app.", ToastAndroid.LONG);
                     this.props.navigation.dispatch(StackActions.replace('HomeScreen'))
                 } else if (responseJson.error) {
-                    await GoogleSignin.revokeAccess();
+                    // await GoogleSignin.revokeAccess();
                     Alert.alert('Error', `${responseJson.error}`);
                 } else if (responseJson.message) {
-                    await GoogleSignin.revokeAccess();
+                    // await GoogleSignin.revokeAccess();
                     Alert.alert('Error', `${responseJson.message}`)
                 } else {
-                    await GoogleSignin.revokeAccess();
+                    // await GoogleSignin.revokeAccess();
                     Alert.alert('Error', "Something went wrong please try again.");
                 }
             })
@@ -68,27 +68,27 @@ export default class Auth extends Component {
             });
     }
 
-    signIn = async (APIKey) => {
-        this.setState({ status: true });
-        try {
-            GoogleSignin.configure({
-                webClientId: APIKey
-            });
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            this.setState({ userInfo, status: true, });
-            this._loginHandler(userInfo.user.email);
+    // signIn = async (APIKey) => {
+    //     this.setState({ status: true });
+    //     try {
+    //         GoogleSignin.configure({
+    //             webClientId: APIKey
+    //         });
+    //         await GoogleSignin.hasPlayServices();
+    //         const userInfo = await GoogleSignin.signIn();
+    //         this.setState({ userInfo, status: true, });
+    //         this._loginHandler(userInfo.user.email);
 
-        } catch (e) {
-            try {
-                this.signIn(APIKeyBackup);
-            } catch (e) {
-                ToastAndroid.show("Login Faild, Something went wrong please try with email and password!.", ToastAndroid.LONG);
-            }
-        } finally {
-            this.setState({ status: false, });
-        }
-    };
+    //     } catch (e) {
+    //         try {
+    //             this.signIn(APIKeyBackup);
+    //         } catch (e) {
+    //             ToastAndroid.show("Login Faild, Something went wrong please try with email and password!.", ToastAndroid.LONG);
+    //         }
+    //     } finally {
+    //         this.setState({ status: false, });
+    //     }
+    // };
 
     render() {
         const { navigation } = this.props
@@ -105,12 +105,12 @@ export default class Auth extends Component {
                                 <Text style={[styles.title, { letterSpacing: 2, }]}>login traditionally</Text>
                             </Button>
                         </View>
-                        <View style={{ margin: '3%' }}>
+                        {/* <View style={{ margin: '3%' }}>
                             <Button block bordered transparent onPress={() => this.signIn(APIKey)}>
                                 <Icon name="google" type="FontAwesome5" />
                                 <Text style={[styles.title, { letterSpacing: 2, }]}>Login with Google</Text>
                             </Button>
-                        </View>
+                        </View> */}
                         <View style={{ margin: '3%' }}>
                             <Button block bordered transparent success onPress={() => navigation.navigate('Register')}>
                                 <Text style={[styles.title, { letterSpacing: 2, }]}>Register</Text>

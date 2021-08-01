@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, SafeAreaView, FlatList, TouchableOpacity, Alert, ActivityIndicator, Image } from 'react-native'
-import { Container, Content, Card, Spinner, Icon, CardItem } from 'native-base'
+import { Container, Content, Card, Body, Icon, CardItem } from 'native-base'
 import AsyncStorage from '@react-native-community/async-storage';
 
-const ListRender = ({ thumbnail, url, title, navigation, subs, subscribed }) => {
+const ListRender = ({ thumbnail, url, title, navigation, subs, subscribed, description, date }) => {
     return (
         <TouchableOpacity
             onPress={() =>
@@ -13,23 +13,23 @@ const ListRender = ({ thumbnail, url, title, navigation, subs, subscribed }) => 
                         navigation.navigate('CoursePlayer', { url: url }))
                     : navigation.navigate('CoursePlayer', { url: url })}>
             <Card style={styles.pdfContainer}>
-                <CardItem cardBody>
-                    <Image source={{ uri: `http://home.gyaano.in/images/thumbnail/${thumbnail}` }} style={{ height: 150, width: '100%', flex: 1, resizeMode: 'cover' }} />
+                <CardItem header style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ fontFamily: 'Montserrat-SemiBold' }}>{title}</Text>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: subs == "no" ? '#90ee90' : '#6691e0', width: '30%', height: 30, borderRadius: 5000 }}>
+                        <Text style={{ color: '#fff', textAlignVertical: 'center', textAlign: 'center', fontFamily: 'Montserrat-SemiBold' }}>{subs == "no" ? 'Paid' : 'Demo'}</Text>
+                    </View>
                 </CardItem>
-                <View style={styles.pdf}>
-                    <Text
-                        style={styles.pdfTitle}
-                        numberOfLines={1}
-                    >{title}</Text>
-                    {
-                        subs == "no" ? null :
-                            <View style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Icon type="FontAwesome5" name="file-video" />
-                            </View>
-
-                    }
-
-                </View>
+                <CardItem>
+                    <View style={[{ width: '100%', borderWidth: 0.8, borderColor: '#0004', borderRadius: 8 }, !thumbnail ? { justifyContent: 'center', alignItems: 'center' } : null]}>
+                        {
+                            thumbnail ? <Image source={{ uri: `http://home.gyaano.in/images/thumbnail/${thumbnail}` }} style={{ width: '100%', flex: 1, height: 150 }} /> :
+                                <Text style={{ padding: '5%', fontFamily: 'Montserrat-Regular' }}>No Image</Text>
+                        }
+                    </View>
+                </CardItem>
+                <CardItem footer>
+                    <Text style={{ fontFamily: 'Montserrat-SemiBold' }}>{date}</Text>
+                </CardItem>
             </Card>
         </TouchableOpacity>
     )
@@ -37,14 +37,11 @@ const ListRender = ({ thumbnail, url, title, navigation, subs, subscribed }) => 
 
 export default class CourseTopic extends Component {
     state = {
-        status: false,
         courseList: [],
         pdflink: '',
+        isLoadding: true
     }
     componentDidMount = async () => {
-        this.setState({
-            status: true,
-        });
         const { title, courseid, subjectid, subscribed } = this.props.route.params
         await AsyncStorage.setItem('courseid', `${courseid}`);
         await AsyncStorage.setItem('subjectid', `${subjectid}`);
@@ -63,9 +60,6 @@ export default class CourseTopic extends Component {
             body: formdata,
         }).then((response) => response.json())
             .then(async (responseJson) => {
-                this.setState({
-                    status: false,
-                });
                 if (typeof responseJson.data != "undefined") {
                     this.setState({
                         courseList: responseJson.data,
@@ -77,17 +71,18 @@ export default class CourseTopic extends Component {
                 }
             })
             .catch((error) => {
-                this.setState({
-                    status: false,
-                });
                 alert(error);
+            }).finally(() => {
+                this.setState({
+                    isLoadding: false
+                })
             });
 
     }
 
     render() {
 
-        const { status, courseList } = this.state
+        const { isLoadding, courseList } = this.state
         const { navigation } = this.props
         const { subscribed } = this.props.route.params
         const { center, hide } = styles
@@ -110,16 +105,18 @@ export default class CourseTopic extends Component {
                                                 subs={item.is_demo}
                                                 subscribed={subscribed}
                                                 id={item.topicid}
+                                                description={item.description}
+                                                date={item.date}
                                             />
                                     }
                                     keyExtractor={(item, index) => 'key' + index}
-                                    refreshing={status}
+                                    refreshing={isLoadding}
                                     onRefresh={this.componentDidMount}
-                                /> : <Text style={{ textAlign: 'center', fontSize: 16, marginTop: '50%' }}>No data available</Text>
+                                /> : <Text style={[!isLoadding ? { textAlign: 'center', fontSize: 16, marginTop: '50%' } : hide]}>No data available</Text>
                         }
                     </SafeAreaView>
                 </Content>
-                <ActivityIndicator size="large" style={status ? center : hide} />
+                <ActivityIndicator size="large" style={isLoadding ? center : hide} color="black" />
             </Container >
         )
     }
@@ -127,7 +124,7 @@ export default class CourseTopic extends Component {
 
 const styles = StyleSheet.create({
     pdfContainer: {
-        paddingVertical: '5%',
+        paddingVertical: '0%',
     },
     pdf: {
         flexDirection: 'row',

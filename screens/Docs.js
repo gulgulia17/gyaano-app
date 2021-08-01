@@ -77,7 +77,7 @@ export default class Docs extends Component {
                             <Button transparent onPress={() => navigation.openDrawer()} >
                                 <Icon name='menu' style={{ color: '#000' }} />
                             </Button>
-                            <Text style={[styles.title, { marginTop: '2%' }]}>Docs</Text>
+                            <Text style={[styles.title, { marginTop: '2.8%' }]}>Docs</Text>
                         </View>
                     </View>
                 </View>

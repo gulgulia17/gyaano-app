@@ -9,11 +9,13 @@ import {
     TouchableOpacity,
     ToastAndroid,
     ActivityIndicator,
+    Alert,
 } from 'react-native'
 import { View, Button, Icon, List, ListItem } from 'native-base';
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation';
 import { ScrollView } from 'react-native-gesture-handler';
+import ytdl from "react-native-ytdl"
 
 export default class CoursePlayer extends Component {
     constructor(props) {
@@ -35,8 +37,10 @@ export default class CoursePlayer extends Component {
         modalVisible: false,
         fullScreen: true,
         opacity: 0,
-        quality: 180,
+        quality: 360,
         isBuffering: false,
+        videoURL: '',
+        isLoadding: true
     };
 
     onLoadStart = () => {
@@ -48,7 +52,6 @@ export default class CoursePlayer extends Component {
     }
 
     onBuffer(data) {
-        alert('Buffernin please wait');
         this.setState({ isBuffering: data.isBuffering });
     }
     onProgress(data) {
@@ -62,7 +65,7 @@ export default class CoursePlayer extends Component {
             return 0;
         }
     }
-    onError() {
+    onError(data) {
         this.setState({ error: data.error });
     }
 
@@ -143,7 +146,28 @@ export default class CoursePlayer extends Component {
         });
     };
 
-    componentDidMount() {
+    async componentDidMount() {
+        try {
+            const url = this.props.route.params.url
+            const youtubeURL = url;
+            let info = await ytdl.getInfo(ytdl.getVideoID(youtubeURL));
+            let format = ytdl.chooseFormat(info.formats, { quality: '18' });
+            const videoURL = format.url
+            if (videoURL) {
+                this.setState({
+                    videoURL
+                })
+            } else {
+                Alert.alert('Invalid Video', 'Not video recieved')
+            }
+        } catch (error) {
+            Alert.alert('Video Playback Faild', 'There are some technical issue please contact admin.');
+        } finally {
+            this.setState({
+                isLoadding: false
+            })
+        }
+
         this.backHandler = BackHandler.addEventListener(
             "hardwareBackPress",
             this.backAction
@@ -155,7 +179,7 @@ export default class CoursePlayer extends Component {
     }
     render() {
 
-        const { modalVisible, quality, isBuffering } = this.state
+        const { modalVisible, quality, isBuffering, videoURL, isLoadding } = this.state
         const {
             container,
             fullScreen,
@@ -165,36 +189,39 @@ export default class CoursePlayer extends Component {
             closeModal,
             activityIndicator,
         } = styles
-        const url = this.props.route.params.url
         return (
             <View style={container}>
                 <StatusBar hidden={true} />
+                {
+                    !isLoadding ?
+                        <Video
+                            source={{ uri: videoURL }}
+                            style={isLoadding ? { display: 'none' } : fullScreen}
+                            rate={this.state.rate}
+                            paused={this.state.paused}
+                            volume={this.state.volume}
+                            muted={this.state.muted}
+                            resizeMode={this.state.resizeMode}
+                            onBuffer={this.onBuffer}
+                            onLoadStart={this.onLoadStart}
+                            onLoad={this.onLoad}
+                            onProgress={this.onProgress}
+                            onEnd={() => { ToastAndroid.show("Video finishes!", ToastAndroid.SHORT); }}
+                            controls
+                            selectedVideoTrack={{
+                                type: 'resolution',
+                                value: quality
+                            }}
+                            bufferConfig={{
+                                minBufferMs: 15000,
+                                maxBufferMs: 50000,
+                                bufferForPlaybackMs: 2500,
+                                bufferForPlaybackAfterRebufferMs: 5000,
+                            }}
+                            onError={this.onError}
+                        /> : null
+                }
 
-                <Video source={{ uri: url }}
-                    style={fullScreen}
-                    rate={this.state.rate}
-                    paused={this.state.paused}
-                    volume={this.state.volume}
-                    muted={this.state.muted}
-                    resizeMode={this.state.resizeMode}
-                    onBuffer={this.onBuffer}
-                    onLoadStart={this.onLoadStart}
-                    onLoad={this.onLoad}
-                    onProgress={this.onProgress}
-                    onEnd={() => { ToastAndroid.show("Video finishes!", ToastAndroid.SHORT); }}
-                    controls
-                    selectedVideoTrack={{
-                        type: 'resolution',
-                        value: quality
-                    }}
-                    bufferConfig={{
-                        minBufferMs: 15000,
-                        maxBufferMs: 50000,
-                        bufferForPlaybackMs: 2500,
-                        bufferForPlaybackAfterRebufferMs: 5000,
-                    }}
-                    onError={this.onError}
-                />
                 <ActivityIndicator
                     animating
                     size="large"
@@ -257,10 +284,7 @@ export default class CoursePlayer extends Component {
                                     </List>
                                     <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Quality</Text>
                                     <List style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        {this.videoQualityControl(180)}
-                                        {this.videoQualityControl(240)}
                                         {this.videoQualityControl(360)}
-                                        {this.videoQualityControl(480)}
                                     </List>
                                     <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Volume</Text>
                                     <List style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

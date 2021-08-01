@@ -124,7 +124,7 @@ export default class Forgot extends Component {
                                 dark
                                 onPress={() => otpField ? this._resetPassword(email, otp) : this._forogotHandler(email)}
                                 disabled={isLoadding ? true : false}>
-                                <Text>submit</Text>
+                                <Text style={styles.title}>submit</Text>
                             </Button>
                         </View>
                     </View>
@@ -153,5 +153,8 @@ const styles = StyleSheet.create({
         right: '50%',
         bottom: '50%',
         position: 'absolute',
-    }
+    },
+    title: {
+        fontFamily: 'Montserrat-Regular',
+    },
 })

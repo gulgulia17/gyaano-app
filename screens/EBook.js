@@ -62,7 +62,7 @@ export default class EBook extends Component {
     render() {
         const { isLoadding, ebooks, subscribed, price, pdfid } = this.state
         const { navigation } = this.props
-        const RenderCard = ({ pdfname }) => {
+        const RenderCard = ({ pdfname, title }) => {
             return (
                 <TouchableOpacity
                     onPress={() =>
@@ -73,7 +73,7 @@ export default class EBook extends Component {
                     <Card style={{ width: Dimensions.get('window').width / 2.1, paddingVertical: '5%', justifyContent: 'center' }}>
                         <CardItem>
                             <Body style={{ alignItems: 'center' }}>
-                                <Text style={[styles.Montserrat, { fontSize: 16 }]}>{pdfname}</Text>
+                                <Text style={[styles.Montserrat, { fontSize: 16 }]}>{title}</Text>
                             </Body>
                         </CardItem>
                     </Card>
@@ -91,6 +91,7 @@ export default class EBook extends Component {
                                     ({ item }) =>
                                         <RenderCard
                                             pdfname={item.pdfname}
+                                            title={item.title}
                                         />
                                 }
                                 keyExtractor={(item, index) => 'key' + index}

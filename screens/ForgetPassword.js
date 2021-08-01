@@ -116,7 +116,7 @@ export default class ForgetPassword extends Component {
                                 dark
                                 onPress={() => this._resetPassword(email, password, password_confirmation)}
                                 disabled={isLoadding}>
-                                <Text>submit</Text>
+                                <Text style={styles.title}>submit</Text>
                             </Button>
                         </View>
                     </View>
@@ -145,5 +145,8 @@ const styles = StyleSheet.create({
         right: '50%',
         bottom: '50%',
         position: 'absolute',
-    }
+    },
+    title: {
+        fontFamily: 'Montserrat-Regular',
+    },
 })

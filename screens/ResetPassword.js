@@ -163,7 +163,7 @@ export default class ResetPassword extends Component {
                                 disabled={isLoadding ? true : false}
                                 onPress={() => this.ResetPasswordHandler(currentpassword, newpassword, confirmnewpassword)}
                             >
-                                <Text>Submit</Text>
+                                <Text style={{ fontFamily: 'Montserrat-Regular' }}>Submit</Text>
                             </Button>
                         </View>
                     </View>
@@ -177,8 +177,8 @@ export default class ResetPassword extends Component {
 
 const styles = StyleSheet.create({
     title: {
-        fontWeight: 'bold',
         textTransform: 'uppercase',
+        fontFamily: 'Montserrat-SemiBold',
         letterSpacing: 1.5,
         fontSize: 14,
     },

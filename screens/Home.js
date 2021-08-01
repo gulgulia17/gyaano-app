@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#0005',
         fontFamily: 'Montserrat-SemiBold',
+        marginTop: '2.8%'
     },
     boxWithShadow: {
         backgroundColor: '#fff',

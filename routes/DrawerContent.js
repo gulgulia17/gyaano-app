@@ -11,8 +11,8 @@ import Fontawesome from 'react-native-vector-icons/FontAwesome5';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { Icon } from 'native-base';
 
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { APIKey, APIKeyBackup } from '../google-congig';
+// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { APIKey, APIKeyBackup } from '../google-config';
 
 export default class DrawerContent extends Component {
     state = {
@@ -63,20 +63,20 @@ export default class DrawerContent extends Component {
         const signOut = async (APIKey) => {
             this.setState({ isSignningOut: true })
             try {
-                GoogleSignin.configure({
-                    webClientId: APIKey
-                });
-                await GoogleSignin.revokeAccess();
+                // GoogleSignin.configure({
+                //     webClientId: APIKey
+                // });
+                // await GoogleSignin.revokeAccess();
                 await AsyncStorage.removeItem('isLoggedIn');
                 await AsyncStorage.removeItem('token');
                 await AsyncStorage.removeItem('userID');
                 navigation.dispatch(StackActions.replace('AuthScreen'));
             } catch (e) {
-                try {
-                    signOut(APIKeyBackup)
-                } catch (error) {
-                    Alert.alert('Error', 'Please clear app data in settings.');
-                }
+                // try {
+                //     signOut(APIKeyBackup)
+                // } catch (error) {
+                Alert.alert('Error', 'Please clear app data in settings.');
+                // }
             } finally {
                 this.setState({ isSignningOut: false })
             }
@@ -222,7 +222,7 @@ export default class DrawerContent extends Component {
                                             <TouchableOpacity onPress={() => Linking.openURL('tel:${+918107746007}')}>
                                                 <Text style={{ textAlign: "center", }, [styles.title]}>
                                                     Helpdesk - +91 8107746007
-                                            </Text>
+                                                </Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>

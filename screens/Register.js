@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, } from 'react-native'
 import { Container, Button, Content, Item, Input, Icon, Text, View } from 'native-base'
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
+// import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { getUniqueId } from 'react-native-device-info';
-import { APIKey, APIKeyBackup } from '../google-congig';
+import { APIKey, APIKeyBackup } from '../google-config';
 
 export default class Register extends Component {
     state = {
@@ -33,36 +33,36 @@ export default class Register extends Component {
 
     }
 
-    google = async (APIKey) => {
-        this.setState({ status: true })
-        try {
-            GoogleSignin.configure({
-                webClientId: APIKey
-            });
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            if (typeof userInfo.user != "undefined") {
-                this.setState({
-                    name: userInfo.user.givenName,
-                    email: userInfo.user.email,
-                    lastname: userInfo.user.familyName,
-                    google: true,
-                })
-                await GoogleSignin.revokeAccess()
-            } else {
-                alert('Something went wrong');
-            }
+    // google = async (APIKey) => {
+    //     this.setState({ status: true })
+    //     try {
+    //         GoogleSignin.configure({
+    //             webClientId: APIKey
+    //         });
+    //         await GoogleSignin.hasPlayServices();
+    //         const userInfo = await GoogleSignin.signIn();
+    //         if (typeof userInfo.user != "undefined") {
+    //             this.setState({
+    //                 name: userInfo.user.givenName,
+    //                 email: userInfo.user.email,
+    //                 lastname: userInfo.user.familyName,
+    //                 google: true,
+    //             })
+    //             await GoogleSignin.revokeAccess()
+    //         } else {
+    //             alert('Something went wrong');
+    //         }
 
 
-        } catch (e) {
-            try {
-                this.google(APIKeyBackup)
-            } catch (e) {
-                Alert.alert('Error', 'Google service not avilable please fill the form manually.');
-            }
-        }
-        finally { this.setState({ status: false }) }
-    }
+    //     } catch (e) {
+    //         try {
+    //             this.google(APIKeyBackup)
+    //         } catch (e) {
+    //             Alert.alert('Error', 'Google service not avilable please fill the form manually.');
+    //         }
+    //     }
+    //     finally { this.setState({ status: false }) }
+    // }
 
     render() {
         const { navigation } = this.props
@@ -182,7 +182,7 @@ export default class Register extends Component {
                         </Button>
 
                     </View>
-                    <View style={{ alignItems: 'center', borderBottomWidth: 1, borderColor: '#0001' }} padder>
+                    {/* <View style={{ alignItems: 'center', borderBottomWidth: 1, borderColor: '#0001' }} padder>
                         <Button
                             bordered rounded block dark transparent
                             onPress={() => this.google()}
@@ -195,7 +195,7 @@ export default class Register extends Component {
                                 <Icon style={[this.state.pressed ? { color: '#fff' } : { color: '#fff' }, { paddingHorizontal: '1%' }]} name="google" type="FontAwesome5" />
                             </View>
                         </Button>
-                    </View>
+                    </View> */}
                     <Content style={{ paddingHorizontal: '5%', backgroundColor: '#fff' }}>
                         <View style={{ marginTop: '5%' }}>
 
@@ -336,19 +336,19 @@ export default class Register extends Component {
 
                             <View style={{ margin: '3%' }}>
                                 <Button block bordered transparent dark onPress={() => _registerHandler()} disabled={status ? true : false}>
-                                    <Text>register</Text>
+                                    <Text style={styles.title}>register</Text>
                                 </Button>
                             </View>
 
                             <View style={{ margin: '3%', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'center' }}>
-                                <Text>Already registered? </Text>
+                                <Text style={styles.title}>Already registered? </Text>
                                 <Button
                                     disabled={status ? true : false}
                                     transparent
-                                    style={{ marginLeft: -10 }}
+                                    style={{ marginTop: '-4%', marginLeft: -10 }}
                                     onPress={() => navigation.push('Login')}
                                 >
-                                    <Text style={{ color: 'blue', }}>login</Text>
+                                    <Text style={[styles.title, { color: 'blue', }]}>login</Text>
                                 </Button>
                             </View>
                         </View>
@@ -366,6 +366,9 @@ const styles = StyleSheet.create({
         letterSpacing: 2,
         textTransform: 'uppercase',
         fontSize: 10
+    },
+    title: {
+        fontFamily: 'Montserrat-Regular',
     },
     button: {
         borderColor: "#ef6c00",

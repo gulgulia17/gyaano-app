@@ -145,7 +145,7 @@ export default class Login extends Component {
                                 style={{ marginLeft: -10 }}
                                 onPress={() => navigation.push('Register')}
                             >
-                                <Text style={[styles.title, { color: 'blue', }]}>register</Text>
+                                <Text style={[styles.title, { marginTop: '-25%', color: 'blue', }]}>register</Text>
                             </Button>
                         </View>
                         <TouchableOpacity

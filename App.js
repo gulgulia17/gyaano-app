@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import { Alert, BackHandler, Linking } from 'react-native';
 import StackNavigator from './routes/StackNavigator'
-import messaging from '@react-native-firebase/messaging';
 import VersionCheck from 'react-native-version-check';
 
 export default class App extends Component {
   async componentDidMount() {
-    messaging().subscribeToTopic("all")
-      .then(() => console.log('Subscribed to topic!'))
     this.checkUpdateNeeded();
   }
 

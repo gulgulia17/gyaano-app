@@ -3,8 +3,7 @@ package com.gyaano;
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.content.Intent;
-import android.content.res.Configuration;
+
 public class MainActivity extends ReactActivity {
 
   /**
@@ -15,18 +14,10 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "CIS";
   }
-  
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-      super.onConfigurationChanged(newConfig);
-      Intent intent = new Intent("onConfigurationChanged");
-      intent.putExtra("newConfig", newConfig);
-      this.sendBroadcast(intent);
   }
 }
